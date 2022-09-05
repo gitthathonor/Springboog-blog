@@ -26,10 +26,20 @@ public class BoardsController {
 
 	// @PostMapping("/boards/{id}/delete")
 	// @PostMapping("/boards/{id}/update")
-
+	
+	
+	// http://localhost:8000/
+	// http://localhost:8000/?page=
 	@GetMapping({ "/", "boards" })
-	public String getBoardList(Model model) {
-		List<MainDto> boardsList = boardsDao.findAll();
+	public String getBoardList(Model model, Integer page) { // 0 -> , 1 - > 10, 2 -> 20
+		if(page == null) page = 0;
+		System.out.println("=========================");
+		System.out.println("page: " + page);
+		System.out.println("=========================");
+		
+		
+		int startNum = page*10;
+		List<MainDto> boardsList = boardsDao.findAll(startNum);
 		model.addAttribute("boardsList", boardsList);
 		return "boards/main";
 	}

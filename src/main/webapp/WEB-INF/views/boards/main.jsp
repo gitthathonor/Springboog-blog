@@ -1,5 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 <%@ include file="../layout/header.jsp"%>
 
@@ -13,15 +12,21 @@
 			</tr>
 		</thead>
 		<tbody>
-		<c:forEach var="boards" items="${boardsList}">
-			<tr>
-				<td>${boards.id}</td>
-				<td><a href="/boards/${boards.id}">${boards.title}</a></td>
-				<td>${boards.username}</td>
-			</tr>
+			<c:forEach var="boards" items="${boardsList}">
+				<tr>
+					<td>${boards.id}</td>
+					<td><a href="/boards/${boards.id}">${boards.title}</a></td>
+					<td>${boards.username}</td>
+				</tr>
 			</c:forEach>
 		</tbody>
 	</table>
+	
+	${param.page }
+	<ul class="pagination">
+		<li class="page-item disabled"><a class="page-link" href="/?page=2">Previous</a></li>
+		<li class="page-item"><a class="page-link" href="/?page=${param.page + 1}">Next</a></li>
+	</ul>
 
 
 </div>
