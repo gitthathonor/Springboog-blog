@@ -11,6 +11,7 @@ public class PagingDto {
 	// DB에서 쿼리로 들고오도록 해본다.
 	// 안되면 pageUtil을 통해서 제작
 	
+//	private Integer currentBlock;
 	private Integer blockPage; // 1~5 = 1, 6~10 = 2 ... //변수
 	private Integer blockCount; // 한 페이지에 페이지 넘버 갯수 5 / 1~5, 6~10, 11~15... //상수
 	private Integer startPageNum; // 1 -> 6 -> 11 //변수

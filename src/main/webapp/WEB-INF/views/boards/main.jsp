@@ -21,9 +21,9 @@
 			</c:forEach>
 		</tbody>
 	</table>
-	
+
 	<%-- <a href="?page=${paging.currentPage+1}">다음페이지</a> --%>
-	
+
 	<%-- <div style="background-color: 'grey';">
 		<h3>totalCount : ${paging.totalCount}</h3>
 		<h3>totalPage : ${paging.totalPage}</h3>
@@ -31,7 +31,7 @@
 		<h3>isLast : ${paging.last}</h3>
 		<h3>isFirst : ${paging.first}</h3>
 	</div> --%>
-	
+
 	${param.page }
 	<%-- <ul class="pagination">
 		<c:if test="${!paging.first}">
@@ -44,20 +44,16 @@
 			<li class="page-item"><a class="page-link" href="/?page=${param.page + 1}">Next</a></li>
 		</c:if>
 	</ul> --%>
-	
-	
-<ul class="pagination">
 
-      <li class='page-item ${paging.first ? "disabled":""}'><a class="page-link" href="?page=${paging.currentPage-1}">Prev</a></li>
-      
-      <c:forEach var="num" begin="${paging.startPageNum }" end="${paging.lastPageNum}" step="1">
-         <li class="page-item"><a class="page-link" href="?page=${num-1}">${num}</a></li>
-      </c:forEach>
-      
-      <li class='page-item ${paging.last ? "disabled":""}'><a class="page-link" href="?page=${paging.currentPage+1}">Next</a></li>
-  
-   </ul>
-
+	<div class="d-flex justify-content-center">
+		<ul class="pagination">
+			<li class='page-item ${paging.first ? "disabled":""}'><a class="page-link" href="?page=${paging.currentPage-1}">Prev</a></li>
+			<c:forEach var="num" begin="${paging.startPageNum }" end="${paging.lastPageNum}" step="1">
+				<li class='page-item ${paging.currentPage == num-1 ? "active" : ""}'><a class="page-link" href="?page=${num-1}">${num}</a></li>
+			</c:forEach>
+			<li class='page-item ${paging.last ? "disabled":""}'><a class="page-link" href="?page=${paging.currentPage+1}">Next</a></li>
+		</ul>
+	</div>
 
 </div>
 

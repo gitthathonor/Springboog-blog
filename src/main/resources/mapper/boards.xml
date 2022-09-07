@@ -5,10 +5,12 @@
 <mapper namespace="site.metacoding.red.domain.boards.BoardsDao">
 
 	<select id="paging" resultType="site.metacoding.red.web.dto.response.boards.PagingDto">
-		SELECT floor((currentPage+1)/5+1) blockPage,
+		SELECT floor(currentPage/blockCount) blockPage,
 		blockCount,
-		1+(floor(currentPage/5))*5 startPageNum,
-		(floor(currentPage/5)+1)*5 lastPageNum,
+		1+(floor(currentPage/blockCount)*blockCount) startPageNum,
+		case when 5+(floor(currentPage/blockCount)*blockCount) > totalPage then
+		totalPage
+		else 5+(floor(currentPage/blockCount)*blockCount) end lastPageNum,
 		totalCount,
 		totalPage,
 		currentPage,
@@ -16,8 +18,9 @@
 		decode(currentPage, totalPage-1, 1, 0) last
 		FROM
 		(
-		SELECT 0 blockPage, 5 blockCount, 0 startPage, 0 lastPage, count(*)
-		totalCount, ceil(count(*)/3) totalPage, #{page} currentPage, 0 first, 0 last
+		SELECT 0 blockPage, 5 blockCount, 0 startPageNum, 0 lastPageNum, count(*)
+		totalCount, ceil(count(*)/3) totalPage, #{page} currentPage, 0 first,
+		0 last
 		FROM boards
 		)
 	</select>
@@ -50,7 +53,7 @@
 	</update>
 
 	<delete id="delete">
-
+		DELETE FROM boards WHERE id = #{id}
 	</delete>
 
 </mapper>
