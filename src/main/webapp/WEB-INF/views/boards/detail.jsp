@@ -6,7 +6,7 @@
 	<br /> <br />
 		<c:if test="${boards.usersId == principal.id}">
 			<div class="d-flex">
-				<form>
+				<form action="/boards/${boards.id}/updateForm">
 					<button class="btn btn-warning">수정하러가기</button>
 				</form>
 

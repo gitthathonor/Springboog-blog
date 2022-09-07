@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import site.metacoding.red.domain.boards.Boards;
 import site.metacoding.red.domain.boards.BoardsDao;
 import site.metacoding.red.domain.users.Users;
+import site.metacoding.red.web.dto.request.boards.UpdateDto;
 import site.metacoding.red.web.dto.request.boards.WriteDto;
 import site.metacoding.red.web.dto.response.boards.MainDto;
 import site.metacoding.red.web.dto.response.boards.PagingDto;
@@ -34,7 +35,7 @@ public class BoardsController {
 		// if는 비정상 로직을 타게 해서 걸러내는 필터 역할을 하는게 좋다.
 		if (boardsPS == null) {
 			System.out.println("boardsPS가 null입니다.");
-			return "redirect:/boards/"+id;
+			return "redirect:/boards/" + id;
 		}
 
 		// 1. 인증체크
@@ -45,15 +46,34 @@ public class BoardsController {
 		}
 
 		// 2. 권한체크 (pincipal.getId()와 boardsPS의 usersId를 비교)
-		if(principal.getId() != boardsPS.getUsersId()) {
-			return "redirect:/boards/"+id;
+		if (principal.getId() != boardsPS.getUsersId()) {
+			return "redirect:/boards/" + id;
 		}
-		
+
 		boardsDao.delete(id);
 		return "redirect:/";
 
 	}
-	// @PostMapping("/boards/{id}/update")
+
+	@GetMapping("/boards/{id}/updateForm")
+	public String updateForm(@PathVariable Integer id, Model model) {
+		Boards boards = boardsDao.findById(id);
+		model.addAttribute("boards",boards);
+		return "boards/updateForm";
+	}
+
+	@PostMapping("/boards/{id}/update")
+	public String update(@PathVariable Integer id, UpdateDto updateDto) {
+		// 1번 세션에 접근해서 세션 값을 확인한다. 그 때 Users로 다운캐스팅하고 key값은 principal로 한다.
+		Users principal = (Users) session.getAttribute("principal");
+		// 2번 principal이 null인지 확인하고 null이면 loginForm을 redirection해준다.
+		if (principal == null) {
+			return "redirect:/loginForm";
+		}
+		
+		boardsDao.update(updateDto.toEntity(principal.getId(), id));
+		return "redirect:/";
+	}
 
 	// http://localhost:8000/
 	// http://localhost:8000/?page=

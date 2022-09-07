@@ -30,4 +30,12 @@ public class Boards {
 		this.title = title;
 		this.content = content;
 	}
+	
+	public Boards(String title, String content, Integer usersId, Integer id) {
+		this.title = title;
+		this.content = content;
+		this.usersId = usersId;
+		this.id = id;
+	}
+	
 }

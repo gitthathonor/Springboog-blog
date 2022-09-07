@@ -49,7 +49,7 @@
 	</select>
 
 	<update id="update">
-
+		UPDATE boards SET title = #{title}, content = #{content}, usersId = #{usersId}, createdAt = sysdate WHERE id = #{id}
 	</update>
 
 	<delete id="delete">
