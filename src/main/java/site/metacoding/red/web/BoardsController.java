@@ -16,6 +16,7 @@ import site.metacoding.red.domain.boards.BoardsDao;
 import site.metacoding.red.domain.users.Users;
 import site.metacoding.red.web.dto.request.boards.WriteDto;
 import site.metacoding.red.web.dto.response.boards.MainDto;
+import site.metacoding.red.web.dto.response.boards.PagingDto;
 
 @Controller
 @RequiredArgsConstructor
@@ -31,23 +32,27 @@ public class BoardsController {
 	// http://localhost:8000/
 	// http://localhost:8000/?page=
 	@GetMapping({ "/", "boards" })
-	public String getBoardList(Model model, Integer page) { // 0 -> , 1 - > 10, 2 -> 20
+	public String getBoardList(Model model, Integer page) { // 0 -> 0, 1 - > 10, 2 -> 20
 		if(page == null) page = 0;
 		System.out.println("=========================");
 		System.out.println("page: " + page);
 		System.out.println("=========================");
+		int startNum = page*3;
 		
-		
-		int startNum = page*10;
 		List<MainDto> boardsList = boardsDao.findAll(startNum);
+		PagingDto paging = boardsDao.paging(page);
+		
+		//paging.set머시기로 dto 완성
+		
+//		int startPage = Math.max(paging.getCurrentPage()-1 , 1);
+//		int endPage = Math.min(paging.getCurrentPage()+1 , paging.getTotalPage());
 		model.addAttribute("boardsList", boardsList);
+		model.addAttribute("paging", paging);
+//		model.addAttribute("startPage", startPage);
+//		model.addAttribute("endPage", endPage);
 		return "boards/main";
 	}
-
-//	@GetMapping("/boards/{id}")
-//	public String getBoardList(@PathVariable Integer id) {
-//		return "boards/detail";
-//	}
+	
 
 	@GetMapping("/boards/writeForm")
 	public String writeForm() {
