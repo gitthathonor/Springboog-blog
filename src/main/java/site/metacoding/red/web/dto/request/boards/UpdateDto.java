@@ -11,12 +11,6 @@ import site.metacoding.red.domain.boards.Boards;
 public class UpdateDto {
 	private String title;
 	private String content;
-	private Integer usersId;
 	private Integer id;
 	
-	
-	public Boards toEntity(Integer id, Integer usersId) {
-		Boards boards = new Boards(this.title, this.content, id, usersId);
-		return boards;
-	}
 }

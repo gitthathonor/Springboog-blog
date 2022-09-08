@@ -32,10 +32,12 @@ public class BoardsController {
 		// 영속화를 시키는 것이 좋다. -> 이유는 트랜젝션을 적게 하기 위해서
 		Boards boardsPS = boardsDao.findById(id);
 
+		// 공통 로직 시작
+
 		// if는 비정상 로직을 타게 해서 걸러내는 필터 역할을 하는게 좋다.
 		if (boardsPS == null) {
 			System.out.println("boardsPS가 null입니다.");
-			return "redirect:/boards/" + id;
+			return "errors/badPage";
 		}
 
 		// 1. 인증체크
@@ -50,31 +52,66 @@ public class BoardsController {
 			return "redirect:/boards/" + id;
 		}
 
-		boardsDao.delete(id);
+		// 공통 로직 끝(모든 메서드마다 대부분 나온다.)
+
+		boardsDao.delete(id); // delete의 핵심 로직
 		return "redirect:/";
 
 	}
 
 	@GetMapping("/boards/{id}/updateForm")
 	public String updateForm(@PathVariable Integer id, Model model) {
-		Boards boards = boardsDao.findById(id);
-		model.addAttribute("boards",boards);
-		return "boards/updateForm";
-	}
-
-	@PostMapping("/boards/{id}/update")
-	public String update(@PathVariable Integer id, UpdateDto updateDto) {
-		// 1번 세션에 접근해서 세션 값을 확인한다. 그 때 Users로 다운캐스팅하고 key값은 principal로 한다.
+		Boards boardsPS = boardsDao.findById(id);
 		Users principal = (Users) session.getAttribute("principal");
-		// 2번 principal이 null인지 확인하고 null이면 loginForm을 redirection해준다.
+		// 공통 로직 시작
+		// if는 비정상 로직을 타게 해서 걸러내는 필터 역할을 하는게 좋다.
+		if (boardsPS == null) {
+			return "errors/badPage";
+		}
+		// 1. 인증체크
 		if (principal == null) {
 			return "redirect:/loginForm";
 		}
+		// 2. 권한체크 (pincipal.getId()와 boardsPS의 usersId를 비교)
+		if (principal.getId() != boardsPS.getUsersId()) {
+			return "errors/badPage";
+		}
+		// 공통 로직 끝(모든 메서드마다 대부분 나온다.)
+		model.addAttribute("boards", boardsPS);
+		return "boards/updateForm";
+	}
+	
+	
+	// update만 영속화 - 변경 - 수정
+	@PostMapping("/boards/{id}/update")
+	public String update(@PathVariable Integer id, UpdateDto updateDto) {
 		
-		boardsDao.update(updateDto.toEntity(principal.getId(), id));
-		return "redirect:/";
+		// 1.영속화
+		Boards boardsPS = boardsDao.findById(id);
+		Users principal = (Users) session.getAttribute("principal");
+		if (boardsPS == null) {
+			return "errors/badPage";
+		}
+		
+		//인증체크
+		if (principal == null) {
+			return "redirect:/loginForm";
+		}
+		// 권한체크
+		if (principal.getId() != boardsPS.getUsersId()) {
+			return "errors/badPage";
+		}
+		
+		// 2.변경
+				boardsPS.글수정(updateDto);
+		
+		// 3.수정
+		boardsDao.update(boardsPS);
+		return "redirect:/boards/" + id; // 사용자의 UX에 따라서 변화가 있을 수 있다.
 	}
 
+	
+	
 	// http://localhost:8000/
 	// http://localhost:8000/?page=
 	@GetMapping({ "/", "boards" })
