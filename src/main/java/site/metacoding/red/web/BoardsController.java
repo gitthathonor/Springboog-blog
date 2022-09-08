@@ -114,17 +114,37 @@ public class BoardsController {
 	
 	// http://localhost:8000/
 	// http://localhost:8000/?page=
+	// 1번째 ?page=0&keyword=스프링 //pathvariable이 아닌 이유->pk가 아니기 때문에
 	@GetMapping({ "/", "boards" })
-	public String getBoardList(Model model, Integer page) { // 0 -> 0, 1 - > 10, 2 -> 20
-		if (page == null)
+	public String getBoardList(Model model, Integer page, String keyword) { // 0 -> 0, 1 - > 10, 2 -> 20
+		if (page == null) {
 			page = 0;
-		System.out.println("=========================");
-		System.out.println("page: " + page);
-		System.out.println("=========================");
-		int startNum = page * 3;
-
-		List<MainDto> boardsList = boardsDao.findAll(startNum);
-		PagingDto paging = boardsDao.paging(page);
+		}
+		
+		int startNum = page*3;
+		
+		if(keyword == null || keyword.isEmpty()) {
+			List<MainDto> boardsList = boardsDao.findAll(startNum);
+			PagingDto paging = boardsDao.paging(page, null);
+			
+			model.addAttribute("boardsList", boardsList);
+			model.addAttribute("paging", paging);
+			
+		} else {
+			List<MainDto> boardsList = boardsDao.findSearch(startNum, keyword);
+			PagingDto paging = boardsDao.paging(page, keyword);
+			
+			if(boardsList.size() == 0) {
+				paging.setFirst(true);
+				paging.setLast(true);
+			}
+			
+			model.addAttribute("boardsList", boardsList);
+			model.addAttribute("paging", paging);
+			model.addAttribute("keyword", keyword);
+		}
+		return "boards/main";
+		
 
 		// paging.set머시기로 dto 완성
 		// 수정함
@@ -143,10 +163,7 @@ public class BoardsController {
 //		paging.setStartPageNum(startPageNum);
 //		paging.setLastPageNum(lastPageNum);
 
-		model.addAttribute("boardsList", boardsList);
-		model.addAttribute("paging", paging);
-
-		return "boards/main";
+		
 	}
 
 	@GetMapping("/boards/writeForm")
