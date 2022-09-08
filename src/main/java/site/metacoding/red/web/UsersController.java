@@ -4,7 +4,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import lombok.RequiredArgsConstructor;
@@ -12,6 +14,7 @@ import site.metacoding.red.domain.users.Users;
 import site.metacoding.red.domain.users.UsersDao;
 import site.metacoding.red.web.dto.request.users.JoinDto;
 import site.metacoding.red.web.dto.request.users.LoginDto;
+import site.metacoding.red.web.dto.request.users.UpdateDto;
 
 @Controller
 @RequiredArgsConstructor
@@ -53,6 +56,36 @@ public class UsersController {
 		session.invalidate();
 		return "redirect:/";
 	}
+	
+	@GetMapping("/users/{id}/updateForm")
+	public String updateForm(@PathVariable Integer id, Model model) {
+		Users usersPS = usersDao.findById(id);
+		Users principal = (Users)session.getAttribute("principal");
+		
+		if(principal == null) {
+			return "redirect:/loginForm";
+		} 
+		
+		model.addAttribute("users", usersPS);
+		
+		return "users/updateForm";
+	}
+	
+	
+	@PostMapping("/users/{id}/update")
+	public String update(@PathVariable Integer id, UpdateDto updateDto) {
+		Users principal = (Users)session.getAttribute("principal");
+		
+		if(principal == null) {
+			return "redirect:/loginForm";
+		} 
+		Users usersPS = usersDao.findById(id);
+		usersPS.회원정보수정(updateDto);
+		usersDao.update(usersPS);
+		session.setAttribute("principal", usersPS);
+		return "redirect:/";
+	}
+	
 	
 	
 	

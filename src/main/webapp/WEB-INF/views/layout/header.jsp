@@ -12,6 +12,9 @@
 </head>
 <body>
 	<h1>${sessionScope.principal.username }</h1>
+	<h1>${sessionScope.principal.password }</h1>
+	<h1>${sessionScope.principal.email }</h1>
+	
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 		<div class="container-fluid">
 			<a class="navbar-brand" href="/boards">Blog</a>
@@ -26,10 +29,12 @@
 						<c:when test="${empty principal}">
 							<li class="nav-item"><a class="nav-link" href="/loginForm">로그인</a></li>
 							<li class="nav-item"><a class="nav-link" href="/joinForm">회원가입</a></li>
+							
 						</c:when>
 						<c:otherwise>
 							<li class="nav-item"><a class="nav-link" href="/boards/writeForm">글쓰기</a></li>
 							<li class="nav-item"><a class="nav-link" href="/logout">로그아웃</a></li>
+							<li class="nav-item"><a class="nav-link" href="/users/${principal.id }/updateForm">회원수정</a></li>
 						</c:otherwise>
 					</c:choose>
 				</ul>
