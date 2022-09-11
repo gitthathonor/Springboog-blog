@@ -109,18 +109,16 @@ public class UsersController {
 			return "redirect:/loginForm";
 		}
 		
-		// boards테이블에서 usersId 0으로 변경(boards)
-		// 게시글 목록에서 username에 익명으로 보이게 하기(MainDto를 매개변수로 받아서 업데이트)
-		
-		
-		
-		
-		// users테이블에서 회원 데이터 삭제
+		// 회원 삭제
 		usersDao.delete(id);
 		
-		// session.invalidate();
+		// session.invalidate()
 		session.invalidate();
 		
+		// boards테이블에서 usersId 삭제(boards)
+		// 게시글 목록에서 username에 익명으로 보이게 하기(MainDto를 매개변수로 받아서 업데이트)
+		// users테이블에서 회원 데이터 삭제
+		// session.invalidate();
 		return "redirect:/";
 	}
 	

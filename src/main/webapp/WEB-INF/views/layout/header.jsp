@@ -32,7 +32,7 @@
 							<li class="nav-item"><a class="nav-link" href="/boards/writeForm">글쓰기</a></li>
 							<li class="nav-item"><a class="nav-link" href="/logout">로그아웃</a></li>
 							<li class="nav-item"><a class="nav-link" href="/users/${principal.id }/updateForm">회원수정</a></li>
-							<li class="nav-item"><a class="nav-link" href="/users/${principal.id }/delete">회원삭제</a></li>
+							<li class="nav-item"><form action="/users/${principal.id }/delete" method="post"><a class="nav-link"><button type="submit">회원삭제</button></a></form></li>
 						</c:otherwise>
 					</c:choose>
 				</ul>

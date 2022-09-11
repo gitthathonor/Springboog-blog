@@ -27,9 +27,14 @@
 	<delete id="delete">
 		DELETE FROM users WHERE id = #{id}
 	</delete>
-
-	<update id="updateUsersBoardsInfo">
+	
+	<insert id="insertNullUsers">
 		
-	</update>
+	</insert>
+	
+	
+	
+	
+	
 
 </mapper>

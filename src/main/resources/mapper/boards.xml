@@ -54,8 +54,11 @@
 	
 	<select id="findAll"
 		resultType="site.metacoding.red.web.dto.response.boards.MainDto">
-		SELECT b.id, b.title, u.username FROM boards b
-		INNER JOIN
+		SELECT b.id, b.title, 
+		case when u.username is null then '익명'
+		else u.username end username 
+		FROM boards b
+		LEFT OUTER JOIN
 		users u
 		ON b.usersId = u.id
 		ORDER BY b.id DESC
