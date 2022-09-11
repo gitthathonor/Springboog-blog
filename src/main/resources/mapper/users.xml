@@ -28,4 +28,8 @@
 		DELETE FROM users WHERE id = #{id}
 	</delete>
 
+	<update id="updateUsersBoardsInfo">
+		
+	</update>
+
 </mapper>

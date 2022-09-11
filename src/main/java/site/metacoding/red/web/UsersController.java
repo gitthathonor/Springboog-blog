@@ -25,6 +25,7 @@ import site.metacoding.red.web.dto.request.users.UpdateDto;
 public class UsersController {
 	
 	private final UsersDao usersDao;
+	private final BoardsDao boardsDao;
 	private final HttpSession session; // spring이 서버 시작 시에 IoC 컨테이너에 보관함
 	
 	
@@ -63,7 +64,10 @@ public class UsersController {
 	
 	@GetMapping("/users/{id}/updateForm")
 	public String updateForm(@PathVariable Integer id, Model model) {
+		
 		Users usersPS = usersDao.findById(id);
+		
+		// 인증
 		Users principal = (Users)session.getAttribute("principal");
 		
 		if(principal == null) {
@@ -78,11 +82,15 @@ public class UsersController {
 	
 	@PostMapping("/users/{id}/update")
 	public String update(@PathVariable Integer id, UpdateDto updateDto) {
+		
+		// 인증
 		Users principal = (Users)session.getAttribute("principal");
 		
 		if(principal == null) {
 			return "redirect:/loginForm";
 		} 
+		
+		
 		Users usersPS = usersDao.findById(id);
 		usersPS.회원정보수정(updateDto);
 		usersDao.update(usersPS);
@@ -101,10 +109,11 @@ public class UsersController {
 			return "redirect:/loginForm";
 		}
 		
-		// boards테이블에서 usersId 0으로 변경
-		 
+		// boards테이블에서 usersId 0으로 변경(boards)
+		// 게시글 목록에서 username에 익명으로 보이게 하기(MainDto를 매개변수로 받아서 업데이트)
 		
-		// 게시글 목록에서 username에 익명으로 보이게 하기
+		
+		
 		
 		// users테이블에서 회원 데이터 삭제
 		usersDao.delete(id);
@@ -114,5 +123,6 @@ public class UsersController {
 		
 		return "redirect:/";
 	}
+	
 	
 }

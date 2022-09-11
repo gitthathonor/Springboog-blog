@@ -4,6 +4,7 @@ import java.util.List;
 
 import site.metacoding.red.web.dto.request.users.JoinDto;
 import site.metacoding.red.web.dto.request.users.LoginDto;
+import site.metacoding.red.web.dto.response.users.DeleteDto;
 
 public interface UsersDao {
 	public void insert(JoinDto joinDto); // DTO 생각해보기
@@ -12,4 +13,5 @@ public interface UsersDao {
 	public void update(Users users); // DTO 생각해보기
 	public void delete(Integer id);
 	public Users login(LoginDto loginDto);
+	public void updateUsersBoardsInfo(DeleteDto deleteDto); // 게시글에서 username을 익명으로 바꾸고, boards테이블에 usersId를 0으로 바꿈
 }
