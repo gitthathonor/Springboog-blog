@@ -11,9 +11,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-	<h1>${sessionScope.principal.username }</h1>
-	<h1>${sessionScope.principal.password }</h1>
-	<h1>${sessionScope.principal.email }</h1>
 	
 	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
 		<div class="container-fluid">
@@ -35,6 +32,7 @@
 							<li class="nav-item"><a class="nav-link" href="/boards/writeForm">글쓰기</a></li>
 							<li class="nav-item"><a class="nav-link" href="/logout">로그아웃</a></li>
 							<li class="nav-item"><a class="nav-link" href="/users/${principal.id }/updateForm">회원수정</a></li>
+							<li class="nav-item"><a class="nav-link" href="/users/${principal.id }/delete">회원삭제</a></li>
 						</c:otherwise>
 					</c:choose>
 				</ul>

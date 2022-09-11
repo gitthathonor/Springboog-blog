@@ -1,5 +1,7 @@
 package site.metacoding.red.web;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import lombok.RequiredArgsConstructor;
+import site.metacoding.red.domain.boards.Boards;
+import site.metacoding.red.domain.boards.BoardsDao;
 import site.metacoding.red.domain.users.Users;
 import site.metacoding.red.domain.users.UsersDao;
 import site.metacoding.red.web.dto.request.users.JoinDto;
@@ -87,6 +91,28 @@ public class UsersController {
 	}
 	
 	
-	
+	@PostMapping("/users/{id}/delete")
+	public String delete(@PathVariable Integer id) {
+		
+		// 인증
+		Users principal = (Users)session.getAttribute("principal");
+		
+		if(principal == null) {
+			return "redirect:/loginForm";
+		}
+		
+		// boards테이블에서 usersId 0으로 변경
+		 
+		
+		// 게시글 목록에서 username에 익명으로 보이게 하기
+		
+		// users테이블에서 회원 데이터 삭제
+		usersDao.delete(id);
+		
+		// session.invalidate();
+		session.invalidate();
+		
+		return "redirect:/";
+	}
 	
 }

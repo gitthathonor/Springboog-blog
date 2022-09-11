@@ -39,7 +39,6 @@ public class Boards {
 	}
 	
 	
-	
 	public void 글수정(UpdateDto updateDto) {
 		this.title = updateDto.getTitle();
 		this.content = updateDto.getContent();
